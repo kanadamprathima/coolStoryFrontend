@@ -1,26 +1,45 @@
-import { Title } from "../styled"
-import { Link } from "react-router-dom"
-import { LinkWord } from "../styled"
-import styled from "styled-components"
+// import { Title } from "../styled";
+// import { Link } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import styled from "styled-components";
+import { getSpaces } from "../store/spaces/thunks";
+import SpaceCard from "../components/SpaceCard";
+import { selectAllSpaces } from "../store/spaces/selectors";
 
 export const Homepage = () => {
+  const dispatch = useDispatch();
+  const allSpaces = useSelector(selectAllSpaces);
+  console.log(" spaces selector ", allSpaces);
 
+  useEffect(() => {
+    dispatch(getSpaces());
+  }, [dispatch]);
   return (
     <Container>
-     <h3>Hello there 👋</h3>
-     <p>General information:</p>
-     <ul>
-      <li>Go to your backend and modify the config url</li>
-      <li>Make sure you clicked on the <b>use template</b> button on github</li>
-      <li>This template is using <a style={LinkWord} target="_blank" href="https://styled-components.com/">styled components</a>, you don't have to use it</li>
-      <li>You don't have to follow the folder structure, feel free to adapt to your own</li>
-      <li>Login and SignUp are already implemented</li>
-      <li>Modify this page to create your own homeepage</li>
-     </ul>
+      <h3>Hello there 👋</h3>
+      {!allSpaces ? (
+        <p>Loading spaces...</p>
+      ) : (
+        allSpaces.map((p, i) => {
+          return (
+            <div key={i}>
+              <SpaceCard
+                id={p.id}
+                title={p.title}
+                des={p.description}
+                backgroundColor={p.backgroundColor}
+                color={p.color}
+              />
+            </div>
+          );
+        })
+      )}
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
-  margin: 20px
-`
+  margin: 20px;
+`;
