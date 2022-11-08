@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectToken } from "../store/user/selectors";
+import { selectToken, selectUser } from "../store/user/selectors";
 import { logOut } from "../store/user/slice";
 import { Link } from "react-router-dom";
 
@@ -11,6 +11,8 @@ export const Navigation = () => {
   const dispatch = useDispatch();
 
   const token = useSelector(selectToken);
+  const user = useSelector(selectUser);
+  const userId = user ? user.id : "";
 
   return (
     <Nav>
@@ -24,9 +26,12 @@ export const Navigation = () => {
       </Hamburger>
       <Menu open={open}>
         <MenuLink to="/spaces">Spaces</MenuLink>
-        <MenuLink to="/myspace">My Space</MenuLink>
         {token ? (
-          <button onClick={() => dispatch(logOut())}>Logout</button>
+          <div>
+            {/* whenevr we login we need to see the myspace link ,otherwise no myspace in navbar*/}
+            <MenuLink to="/myspace">My Space</MenuLink>
+            <button onClick={() => dispatch(logOut())}>Logout</button>
+          </div>
         ) : (
           <MenuLink to="/login">Login</MenuLink>
         )}

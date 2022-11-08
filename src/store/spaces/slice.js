@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   allSpaces: null,
-  spaceDetails: [],
+  spaceDetails: null,
 };
 
 export const spaceSlice = createSlice({

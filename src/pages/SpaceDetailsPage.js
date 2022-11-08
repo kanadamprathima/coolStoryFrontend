@@ -2,7 +2,10 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchSpaceById } from "../store/spaces/thunks";
-import { selectSpaceDetails } from "../store/spaces/selectors";
+import {
+  selectSpaceDetails,
+  selectSpaceStories,
+} from "../store/spaces/selectors";
 import Story from "../components/Story";
 
 const SpaceDetailsPage = () => {
@@ -18,24 +21,36 @@ const SpaceDetailsPage = () => {
   // );
 
   return (
-    <div
-      style={{
-        backgroundColor: spaceDetails.backgroundColor,
-        color: spaceDetails.color,
-        width: "50%",
-      }}
-    >
-      {spaceDetails.stories.map((story, index) => {
-        return (
-          <div key={index}>
-            <Story
-              name={story.name}
-              content={story.content}
-              imageUrl={story.imageUrl}
-            />
-          </div>
-        );
-      })}
+    <div>
+      <h2>space detailspage</h2>
+      {/* dont forget to conditional render in detailspage like {spaceDetails?.title} orelse we can just wrapit in a div and put "title" inside map*/}
+
+      <h3>{spaceDetails?.title}</h3>
+      {!spaceDetails ? (
+        <p>Loading...</p>
+      ) : (
+        spaceDetails.stories.map((p, i) => {
+          return (
+            <div>
+              <div className="card"></div>
+              <div
+                className="container"
+                key={i}
+                style={{
+                  color: `${spaceDetails.color}`,
+                  backgroundColor: `${spaceDetails.backgroundColor}`,
+                }}
+              >
+                <Story
+                  name={p.name}
+                  content={p.content}
+                  imageUrl={p.imageUrl}
+                />
+              </div>
+            </div>
+          );
+        })
+      )}
     </div>
   );
 };

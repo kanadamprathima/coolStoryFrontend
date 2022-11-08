@@ -3,7 +3,12 @@ import axios from "axios";
 import { selectToken } from "./selectors";
 import { appLoading, appDoneLoading, setMessage } from "../appState/slice";
 import { showMessageWithTimeout } from "../appState/thunks";
-import { loginSuccess, logOut, tokenStillValid } from "./slice";
+import {
+  loginSuccess,
+  logOut,
+  tokenStillValid,
+  deleteStorySuccess,
+} from "./slice";
 
 export const signUp = (name, email, password) => {
   return async (dispatch, getState) => {
@@ -55,7 +60,11 @@ export const login = (email, password) => {
       });
 
       dispatch(
-        loginSuccess({ token: response.data.token, user: response.data.user })
+        loginSuccess({
+          token: response.data.token,
+          user: response.data.user,
+          mySpace: response.data.mySpace,
+        })
       );
       dispatch(showMessageWithTimeout("success", false, "welcome back!", 1500));
       dispatch(appDoneLoading());
@@ -101,7 +110,12 @@ export const getUserWithStoredToken = () => {
       });
 
       // token is still valid
-      dispatch(tokenStillValid({ user: response.data }));
+      dispatch(
+        tokenStillValid({
+          user: response.data.user,
+          mySpace: response.data.mySpace, //F4
+        })
+      );
       dispatch(appDoneLoading());
     } catch (error) {
       if (error.response) {
@@ -115,4 +129,27 @@ export const getUserWithStoredToken = () => {
       dispatch(appDoneLoading());
     }
   };
+};
+export const deleteStory = (storyId) => async (dispatch, getState) => {
+  const { mySpace, token } = getState().user;
+  // console.log("Delete thunk - mySpace: ", mySpace);
+  // console.log("Delete thunk - token: ", token);
+  const spaceId = mySpace.id;
+
+  try {
+    const response = await axios.delete(
+      `${apiUrl}/spaces/${spaceId}/stories/${storyId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log("Story deleted?", response.data);
+    dispatch(deleteStorySuccess(storyId));
+    dispatch(appDoneLoading());
+  } catch (e) {
+    console.error(e);
+  }
 };

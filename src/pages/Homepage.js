@@ -11,7 +11,7 @@ import { selectAllSpaces } from "../store/spaces/selectors";
 export const Homepage = () => {
   const dispatch = useDispatch();
   const allSpaces = useSelector(selectAllSpaces);
-  console.log(" spaces selector ", allSpaces);
+  // console.log(" spaces selector ", allSpaces);
 
   useEffect(() => {
     dispatch(getSpaces());
