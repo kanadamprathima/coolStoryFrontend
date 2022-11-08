@@ -8,6 +8,7 @@ import {
   logOut,
   tokenStillValid,
   deleteStorySuccess,
+  postNewStorySuccess,
 } from "./slice";
 
 export const signUp = (name, email, password) => {
@@ -153,3 +154,29 @@ export const deleteStory = (storyId) => async (dispatch, getState) => {
     console.error(e);
   }
 };
+// F5: Post a new story
+export const postNewStory =
+  (name, content, imageUrl) => async (dispatch, getState) => {
+    try {
+      const { mySpace, token } = getState().user;
+      console.log("thunks", name, content, imageUrl);
+      dispatch(appLoading());
+      const response = await axios.post(
+        `${apiUrl}/spaces/${mySpace.id}/stories`,
+        {
+          name,
+          content,
+          imageUrl,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // console.log("post response from thunks", response.data.story);
+      dispatch(postNewStorySuccess(response.data.story));
+    } catch (e) {
+      console.log(e.message);
+    }
+  };

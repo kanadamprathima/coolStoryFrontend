@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { postNewStory } from "../store/user/thunks";
 
 const PostStory = () => {
+  const dispatch = useDispatch();
   const [name, setName] = useState(" ");
   const [content, setContent] = useState(" ");
   const [url, setUrl] = useState(
@@ -9,6 +12,7 @@ const PostStory = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("post stry details form", name, content);
+    dispatch(postNewStory(name, content, url));
   };
   return (
     <div>
@@ -43,7 +47,9 @@ const PostStory = () => {
         </label>
         {url ? <img src={url} alt="preview" style={{ width: 300 }} /> : null}
         <br />
-        <input type="submit" />
+        <button className="btn btn-primary" type="submit">
+          Submit
+        </button>
       </form>
     </div>
   );

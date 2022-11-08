@@ -33,10 +33,19 @@ export const userSlice = createSlice({
         (story) => story.id !== storyId
       );
     },
+    // F5: Post a new story
+    postNewStorySuccess: (state, action) => {
+      state.mySpace.stories.push(action.payload);
+    },
   },
 });
 
-export const { loginSuccess, logOut, tokenStillValid, deleteStorySuccess } =
-  userSlice.actions;
+export const {
+  loginSuccess,
+  logOut,
+  tokenStillValid,
+  deleteStorySuccess,
+  postNewStorySuccess,
+} = userSlice.actions;
 
 export default userSlice.reducer;
