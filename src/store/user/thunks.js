@@ -9,6 +9,7 @@ import {
   tokenStillValid,
   deleteStorySuccess,
   postNewStorySuccess,
+  spaceUpdated,
 } from "./slice";
 
 export const signUp = (name, email, password) => {
@@ -175,8 +176,45 @@ export const postNewStory =
         }
       );
       // console.log("post response from thunks", response.data.story);
+      dispatch(
+        showMessageWithTimeout("success", false, response.data.message, 3000)
+      );
       dispatch(postNewStorySuccess(response.data.story));
+      dispatch(appDoneLoading());
     } catch (e) {
       console.log(e.message);
     }
   };
+//f6 :update the space
+export const updateMySpace = (title, description, backgroundColor, color) => {
+  return async (dispatch, getState) => {
+    try {
+      const { mySpace, token } = getState().user;
+      dispatch(appLoading());
+
+      const response = await axios.put(
+        `${apiUrl}/spaces/${mySpace.id}`,
+        {
+          title,
+          description,
+          backgroundColor,
+          color,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("update response from thunk", response.data.space);
+
+      dispatch(
+        showMessageWithTimeout("success", false, "update successfull ", 3000)
+      );
+      // dispatch(spaceUpdated(response.data.space));
+      dispatch(appDoneLoading());
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+};

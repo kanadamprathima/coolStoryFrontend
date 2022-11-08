@@ -1,16 +1,22 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectMySpace } from "../store/user/selectors";
+import { useDispatch } from "react-redux";
+import { updateMySpace } from "../store/user/thunks";
 
 const EditSpaceForm = () => {
+  const dispatch = useDispatch();
   const mySpace = useSelector(selectMySpace);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState(mySpace.title);
+  const [description, setDescription] = useState(mySpace.description);
   const [backgroundColor, setBackgroundColor] = useState("");
   const [color, setColor] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(updateMySpace(title, description, backgroundColor, color));
     setTitle("");
+    setDescription("");
+
     console.log("from editform ", title, description);
   };
 

@@ -37,6 +37,10 @@ export const userSlice = createSlice({
     postNewStorySuccess: (state, action) => {
       state.mySpace.stories.push(action.payload);
     },
+    //f6:update story in editspaceform
+    spaceUpdated: (state, action) => {
+      state.mySpace = { ...action.payload, stories: state.mySpace.stories };
+    },
   },
 });
 
@@ -46,6 +50,7 @@ export const {
   tokenStillValid,
   deleteStorySuccess,
   postNewStorySuccess,
+  spaceUpdated,
 } = userSlice.actions;
 
 export default userSlice.reducer;
